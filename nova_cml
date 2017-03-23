@@ -1,0 +1,46 @@
+使用 nova 命令行工具创建虚拟机：
+
+首先，通过图形化界面创建一台虚拟机非常简单，按照提示进行选择即可。通过界面创建过程，先来了解创建一台虚拟机都需要哪些资源。
+
+详情
+##########
+信息
+ID 	39095135-940b-490e-9383-a61f80783c61
+名称 	test-yxl-cml
+状态 	运行中
+创建于 	2017-03-23 11:40:08
+运行时间 	0:14:35.270169
+可用域 	nova
+
+资源
+云硬盘 	
+密钥对名称 	
+镜像名称 	TestVM
+安全组 	
+default
+
+配置
+内存 	512 MB
+虚拟内核数（VCPU） 	1
+硬盘 	20GB
+
+网络: share_net
+网络名称 	share_net
+子网名称 	share_net__subnet
+CIDR 	192.168.111.0/24
+固定IP 	192.168.111.86
+公网IP 	
+MAC地址 	fa:16:3e:80:3a:51
+########
+
+由上可知，创建虚拟机的一些必备资源包括： 
+flavor， 指定内存大小，cpu数目，硬盘大小，通过flavor-list可以获得套餐资源列表
+image， 指定安装的虚拟机镜像， 通过 image-list 可以获取镜像资源列表
+security group, 指定虚拟机所在的安全组，通过secgroup-list 获取安全组
+key pair，指定 key ，通过 keypair-list 查看key 
+nic， 指定网络配置信息，通过tenant-network-list 获取网络资源列表
+
+有了上面的直观了解，用nova命令行带上必要的参数，即可创建出一台名为 test-yxl-cml 的虚拟机
+
+nova boot --flavor 1 --image 50c66bdd-ab7e-49e8-9c72-2c6cb5b2c446 \
+          --security_group default --nic net-id=15d7ddcc-7745-486f-84f8-9789dcee704f test-yxl-cml
