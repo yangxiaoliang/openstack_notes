@@ -44,3 +44,17 @@ nic， 指定网络配置信息，通过tenant-network-list 获取网络资源�
 
 nova boot --flavor 1 --image 50c66bdd-ab7e-49e8-9c72-2c6cb5b2c446 \
           --security_group default --nic net-id=15d7ddcc-7745-486f-84f8-9789dcee704f test-yxl-cml
+          
+启动之后，状态变为 RUNNING， 但这时候是无法通过外网访问的。接下来需要做的，添加 floating ip 地址，有了float ip， 外部才可访问：
+nova  floating-ip-list  # 查看外网IP
+nova  floating-ip-create  # 创建新的外网IP
+nova floating-ip-associate test-yxl-vm 172.16.10.149  # 将外网IP，添加到virtual machine中
+
+接下来ping 刚添加的float ip 172.16.10.149， 但依然ping不通，通过查看主机所在的安全组，发现规则设置有问题，
+为方便实验需求，新建安全组，设定外部可ping，可ssh登陆。
+
+nova secgroup-list
+nova add-secgroup test-yxl-vm yxl
+
+中间在设置密码的时候，把VM状态给搞挂过一次，通过下面的命令将虚拟机重启回来，回归到RUNNING的状态
+nova reboot --hard <Instance_Name>
